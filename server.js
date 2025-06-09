@@ -12,7 +12,7 @@ const io = new Server(server, {
   }
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // --- NUEVO: Objeto para almacenar usuarios por sala ---
 const roomUsers = {};
