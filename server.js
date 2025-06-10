@@ -5,61 +5,78 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
+// Configuración de CORS. Usar "*" es flexible, pero para producción
+// podrías restringirlo a la URL de tu Vercel.
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "*", 
     methods: ["GET", "POST"]
   }
 });
 
+// Usa el puerto asignado por Render o el 3001 para desarrollo local
 const PORT = process.env.PORT || 3001;
 
-// --- NUEVO: Objeto para almacenar usuarios por sala ---
+// Objeto para almacenar la lista de usuarios por cada sala.
+// La estructura es: { roomId: [{ id, username }, { id, username }] }
 const roomUsers = {};
 
+// Lógica principal de conexión de Socket.IO
 io.on('connection', (socket) => {
   console.log(`🔌 Un usuario se ha conectado con el id: ${socket.id}`);
 
-  socket.on('join-room', (roomId) => {
+  // Evento para unirse a una sala
+  socket.on('join-room', ({ roomId, username }) => {
     socket.join(roomId);
-    console.log(`✅ Usuario ${socket.id} se unió a la sala ${roomId}.`);
+    console.log(`✅ Usuario ${username} (ID: ${socket.id}) se unió a la sala ${roomId}.`);
 
-    // --- LÓGICA DE USUARIOS: Añadir usuario a la sala ---
+    // Inicializa el array de la sala si no existe
     if (!roomUsers[roomId]) {
       roomUsers[roomId] = [];
     }
-    roomUsers[roomId].push(socket.id);
+    
+    // VERIFICACIÓN ANTI-DUPLICADOS:
+    // Se comprueba si el usuario ya existe en la sala antes de añadirlo.
+    const userExists = roomUsers[roomId].some(user => user.id === socket.id);
+    if (!userExists) {
+      roomUsers[roomId].push({ id: socket.id, username });
+    }
 
-    // --- Emitir la lista de usuarios actualizada a TODOS en la sala ---
+    // Se emite la lista de usuarios actualizada (ya sin duplicados) a todos en la sala.
     io.to(roomId).emit('room-users-update', roomUsers[roomId]);
   });
 
+  // Evento para los cambios en el código
   socket.on('code-change', ({ roomId, code }) => {
+    // Se emite el cambio a todos en la sala, excepto al remitente
     socket.broadcast.to(roomId).emit('code-update', code);
   });
 
+  // Evento para cuando un usuario se desconecta
   socket.on('disconnect', () => {
     console.log(`👋 El usuario con id ${socket.id} se ha desconectado`);
 
-    // --- LÓGICA DE USUARIOS: Eliminar usuario de la sala al desconectar ---
-    // Encontramos la sala en la que estaba el usuario
+    // Lógica para eliminar al usuario de la lista de participantes
     for (const roomId in roomUsers) {
       const usersInRoom = roomUsers[roomId];
-      const userIndex = usersInRoom.indexOf(socket.id);
+      
+      // Se busca al usuario por su socket.id
+      const userIndex = usersInRoom.findIndex(user => user.id === socket.id);
       
       if (userIndex !== -1) {
-        // Eliminamos al usuario de la lista
-        usersInRoom.splice(userIndex, 1);
+        // Se elimina al usuario de la lista
+        const disconnectedUser = usersInRoom.splice(userIndex, 1)[0];
         
-        // Emitimos la lista actualizada a los usuarios restantes en la sala
+        // Se emite la lista actualizada al resto de usuarios en la sala
         io.to(roomId).emit('room-users-update', usersInRoom);
         
-        console.log(`🧹 Usuario ${socket.id} eliminado de la sala ${roomId}`);
-        break; // Rompemos el bucle una vez encontrado y eliminado
+        console.log(`🧹 Usuario ${disconnectedUser.username} eliminado de la sala ${roomId}`);
+        break; // Se rompe el bucle una vez encontrado y eliminado
       }
     }
   });
 });
+
 
 server.listen(PORT, () => {
   console.log(`🚀 Servidor escuchando en el puerto ${PORT}`);
